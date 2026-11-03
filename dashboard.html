@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniVerse Nexus | Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body.dashboard-page {
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 45px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-align: center;
+            background:
+                radial-gradient(circle at 15% 15%, #38206d, transparent 35%),
+                radial-gradient(circle at 85% 80%, #102d68, transparent 35%),
+                #03020d;
+        }
+
+        .dashboard-page h1 {
+            font-size: clamp(38px, 6vw, 58px);
+            text-shadow: 0 0 20px #9560ff;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-subtitle {
+            color: #d5c8ff;
+            font-size: 19px;
+            margin-bottom: 35px;
+        }
+
+        .dashboard-grid {
+            width: min(100%, 950px);
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .dashboard-card {
+            padding: 28px 18px;
+            border-radius: 22px;
+            background: rgba(34, 22, 75, .8);
+            border: 1px solid #8764d8;
+            box-shadow: 0 0 22px rgba(126, 76, 255, .25);
+            transition: .3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 30px rgba(151, 91, 255, .55);
+        }
+
+        .dashboard-card .symbol {
+            font-size: 35px;
+        }
+
+        .dashboard-card h2 {
+            font-size: 21px;
+            color: #d9c7ff;
+        }
+
+        .count {
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 15px #a77bff;
+        }
+
+        .dashboard-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin: 35px 0;
+        }
+
+        .dashboard-links a {
+            color: white;
+            text-decoration: none;
+            padding: 13px 22px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #7138db, #2768dc);
+            border: 1px solid #b99aff;
+            box-shadow: 0 0 15px #5635a8;
+        }
+
+        .recent-section {
+            width: min(100%, 950px);
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .recent-section h2 {
+            text-align: center;
+            color: #d9c7ff;
+        }
+
+        .recent-item {
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 14px;
+            background: rgba(54, 35, 100, .75);
+            border: 1px solid #795bb5;
+            overflow-wrap: anywhere;
+        }
+
+        .empty-message {
+            color: #c9b9ed;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="world-page dashboard-page">
+
+    <h1>My Dashboard</h1>
+    <p class="dashboard-subtitle">
+        Your universe at a glance. Explore your progress!
+    </p>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+            <div class="symbol">💡</div>
+            <h2>Projects</h2>
+            <div class="count" id="projectCount">0</div>
+            <p>Saved projects</p>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="symbol">🎭</div>
+            <h2>Talents</h2>
+            <div class="count" id="talentCount">0</div>
+            <p>Saved talents</p>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="symbol">🚀</div>
+            <h2>Events</h2>
+            <div class="count" id="eventCount">0</div>
+            <p>Event entries</p>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="symbol">🏆</div>
+            <h2>Achievements</h2>
+            <div class="count" id="achievementCount">0</div>
+            <p>Saved achievements</p>
+        </div>
+
+    </div>
+
+    <div class="dashboard-links">
+        <a href="index.html">🌌 Universe Home</a>
+        <a href="talent.html">🎭 Talent World</a>
+        <a href="project.html">💡 Project World</a>
+        <a href="events.html">🚀 Events World</a>
+        <a href="achievement.html">🏆 Achievement World</a>
+    </div>
+
+    <section class="recent-section">
+        <h2>✦ Your Saved Activities ✦</h2>
+        <div id="recentActivities">
+            <p class="empty-message">Loading your activities...</p>
+        </div>
+    </section>
+
+    <script>
+        function getSavedData(keyword) {
+            let results = [];
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+
+                if (!key || !key.toLowerCase().includes(keyword)) {
+                    continue;
+                }
+
+                try {
+                    const value = JSON.parse(localStorage.getItem(key));
+
+                    if (Array.isArray(value)) {
+                        results.push(...value);
+                    } else if (value && typeof value === "object") {
+                        results.push(value);
+                    }
+                } catch (error) {
+                    // Ignore values that are not JSON data.
+                }
+            }
+
+            return results;
+        }
+
+        function displayDashboard() {
+            const projects = getSavedData("project");
+            const talents = getSavedData("talent");
+            const events = getSavedData("event");
+            const achievements = getSavedData("achievement");
+
+            document.getElementById("projectCount").textContent = projects.length;
+            document.getElementById("talentCount").textContent = talents.length;
+            document.getElementById("eventCount").textContent = events.length;
+            document.getElementById("achievementCount").textContent = achievements.length;
+
+            const allActivities = [
+                ...projects.map(item => ({ type: "💡 Project", data: item })),
+                ...talents.map(item => ({ type: "🎭 Talent", data: item })),
+                ...events.map(item => ({ type: "🚀 Event", data: item })),
+                ...achievements.map(item => ({ type: "🏆 Achievement", data: item }))
+            ];
+
+            const recent = document.getElementById("recentActivities");
+            recent.innerHTML = "";
+
+            if (allActivities.length === 0) {
+                recent.innerHTML =
+                    '<p class="empty-message">No saved activities found yet.</p>';
+                return;
+            }
+
+            allActivities.slice(-10).reverse().forEach(activity => {
+                const item = document.createElement("div");
+                item.className = "recent-item";
+
+                const title =
+                    activity.data.title ||
+                    activity.data.name ||
+                    activity.data.projectName ||
+                    activity.data.eventName ||
+                    activity.data.talent ||
+                    "Saved entry";
+
+                item.textContent = activity.type + " — " + title;
+                recent.appendChild(item);
+            });
+        }
+
+        displayDashboard();
+    </script>
+
+</body>
+</html>

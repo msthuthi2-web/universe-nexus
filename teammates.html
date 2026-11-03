@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Find Teammates | UniVerse Nexus</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .team-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        .team-form {
+            max-width: 500px;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .team-form input,
+        .team-form textarea,
+        .team-form select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .team-form label {
+            text-align: left;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .team-card {
+            padding: 22px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            text-align: left;
+            background: rgba(255,255,255,0.06);
+            overflow-wrap: anywhere;
+        }
+
+        .team-card h3 {
+            margin-top: 0;
+        }
+
+        .team-card button {
+            margin-top: 12px;
+        }
+
+        .team-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 35px auto;
+        }
+    </style>
+</head>
+
+<body class="world-page teammates-page">
+
+    <!-- NAVIGATION -->
+
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            ✦ UniVerse Nexus
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="talent.html">Talent</a>
+            <a href="project.html">Projects</a>
+            <a href="events.html">Events</a>
+            <a href="achievement.html">Achievements</a>
+            <a href="ideas.html">Suggest Ideas</a>
+            <a href="teammates.html" class="active">Find Teammates</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="team-container">
+
+        <span class="tag">✧ BUILD YOUR DREAM TEAM ✧</span>
+
+        <h1>Find Your Teammates 🤝</h1>
+
+        <p>
+            Great ideas become reality when creative minds work together.
+            Find students who share your interests!
+        </p>
+
+
+        <!-- PROFILE FORM -->
+
+        <h2>Create Your Student Profile</h2>
+
+        <form id="teamForm" class="team-form">
+
+            <label for="studentName">Your Name</label>
+
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label for="studentCourse">Course / Department</label>
+
+            <input
+                type="text"
+                id="studentCourse"
+                placeholder="Example: BCA"
+                required
+            >
+
+            <label for="studentSkills">Your Skills</label>
+
+            <input
+                type="text"
+                id="studentSkills"
+                placeholder="Example: HTML, Python, C"
+                required
+            >
+
+            <label for="studentInterest">Project Interest</label>
+
+            <select id="studentInterest" required>
+                <option value="">Select your interest</option>
+                <option>Web Development</option>
+                <option>Artificial Intelligence</option>
+                <option>App Development</option>
+                <option>Data Science</option>
+                <option>Creative Projects</option>
+                <option>Other</option>
+            </select>
+
+            <textarea
+                id="studentAbout"
+                rows="4"
+                placeholder="Tell others about yourself..."
+                required
+            ></textarea>
+
+            <button type="submit">
+                ✦ Create Profile
+            </button>
+
+        </form>
+
+
+        <!-- STUDENT PROFILES -->
+
+        <h2>🌟 Explore Students</h2>
+
+        <p>Discover students and connect with your future teammates.</p>
+
+        <div id="teamList" class="team-grid"></div>
+
+
+        <!-- TEAM REQUESTS -->
+
+        <h2>📩 My Team Requests</h2>
+
+        <div id="requestList" class="team-grid"></div>
+
+
+        <!-- NAVIGATION BUTTONS -->
+
+        <div class="team-buttons">
+
+            <a href="index.html" class="back-btn">
+                ← Back to Universe
+            </a>
+
+            <a href="dashboard.html" class="back-btn">
+                Go to Dashboard →
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const teamForm = document.getElementById("teamForm");
+        const teamList = document.getElementById("teamList");
+        const requestList = document.getElementById("requestList");
+
+
+        // DISPLAY STUDENT PROFILES
+
+        function displayTeams() {
+
+            const students = JSON.parse(
+                localStorage.getItem("teamStudents") || "[]"
+            );
+
+            teamList.innerHTML = "";
+
+            if (students.length === 0) {
+
+                teamList.innerHTML =
+                    "<p>No student profiles yet. Be the first!</p>";
+
+                return;
+            }
+
+            students.forEach(function(student) {
+
+                const card = document.createElement("div");
+                card.className = "team-card";
+
+                const name = document.createElement("h3");
+                name.textContent = "👤 " + student.name;
+
+                const course = document.createElement("p");
+                course.textContent = "Course: " + student.course;
+
+                const skills = document.createElement("p");
+                skills.textContent = "Skills: " + student.skills;
+
+                const interest = document.createElement("p");
+                interest.textContent = "Interest: " + student.interest;
+
+                const about = document.createElement("p");
+                about.textContent = student.about;
+
+                const requestButton = document.createElement("button");
+                requestButton.textContent = "🤝 Send Team Request";
+
+                requestButton.addEventListener("click", function() {
+                    sendRequest(student);
+                });
+
+                card.appendChild(name);
+                card.appendChild(course);
+                card.appendChild(skills);
+                card.appendChild(interest);
+                card.appendChild(about);
+                card.appendChild(requestButton);
+
+                teamList.appendChild(card);
+
+            });
+
+        }
+
+
+        // CREATE STUDENT PROFILE
+
+        teamForm.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const student = {
+
+                id: Date.now(),
+
+                name: document.getElementById("studentName").value.trim(),
+
+                course: document.getElementById("studentCourse").value.trim(),
+
+                skills: document.getElementById("studentSkills").value.trim(),
+
+                interest: document.getElementById("studentInterest").value,
+
+                about: document.getElementById("studentAbout").value.trim()
+
+            };
+
+
+            if (
+                !student.name ||
+                !student.course ||
+                !student.skills ||
+                !student.interest ||
+                !student.about
+            ) {
+
+                alert("Please fill all fields!");
+                return;
+
+            }
+
+
+            const students = JSON.parse(
+                localStorage.getItem("teamStudents") || "[]"
+            );
+
+            students.push(student);
+
+            localStorage.setItem(
+                "teamStudents",
+                JSON.stringify(students)
+            );
+
+
+            alert("Your profile has been created successfully!");
+
+            teamForm.reset();
+
+            displayTeams();
+
+        });
+
+
+        // SEND TEAM REQUEST
+
+        function sendRequest(student) {
+
+            const requests = JSON.parse(
+                localStorage.getItem("teamRequests") || "[]"
+            );
+
+            const alreadySent = requests.some(function(request) {
+                return request.studentId === student.id;
+            });
+
+            if (alreadySent) {
+
+                alert("You have already sent a request to this student!");
+                return;
+
+            }
+
+
+            requests.push({
+
+                studentId: student.id,
+
+                studentName: student.name,
+
+                interest: student.interest,
+
+                status: "Pending"
+
+            });
+
+
+            localStorage.setItem(
+                "teamRequests",
+                JSON.stringify(requests)
+            );
+
+
+            alert("Team request sent successfully!");
+
+            displayRequests();
+
+        }
+
+
+        // DISPLAY SENT REQUESTS
+
+        function displayRequests() {
+
+            const requests = JSON.parse(
+                localStorage.getItem("teamRequests") || "[]"
+            );
+
+            requestList.innerHTML = "";
+
+            if (requests.length === 0) {
+
+                requestList.innerHTML =
+                    "<p>No team requests sent yet.</p>";
+
+                return;
+
+            }
+
+
+            requests.forEach(function(request) {
+
+                const card = document.createElement("div");
+                card.className = "team-card";
+
+                const name = document.createElement("h3");
+                name.textContent = "👤 " + request.studentName;
+
+                const interest = document.createElement("p");
+                interest.textContent = "Interest: " + request.interest;
+
+                const status = document.createElement("p");
+                status.textContent = "Status: " + request.status;
+
+                card.appendChild(name);
+                card.appendChild(interest);
+                card.appendChild(status);
+
+                requestList.appendChild(card);
+
+            });
+
+        }
+
+
+        // LOAD DATA WHEN PAGE OPENS
+
+        displayTeams();
+        displayRequests();
+
+    </script>
+
+</body>
+</html>

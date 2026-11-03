@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project World</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="world-page project-page">
+
+    <h1>🚀 PROJECT WORLD</h1>
+    <p>Explore ideas. Build innovations. Share projects.</p>
+
+    <div class="box">
+        <h2>Submit Your Project</h2>
+
+        <input type="text" id="title" placeholder="Project Title">
+
+        <textarea id="description" placeholder="Project Description"></textarea>
+
+        <input type="text" id="team" placeholder="Team Members">
+
+        <button onclick="addProject()">Submit Project</button>
+
+        <h2>My Projects</h2>
+        <div id="projectList"></div>
+
+        <button onclick="location.href='index.html'">
+            ⬅ Back to Universe
+        </button>
+    </div>
+
+    <script>
+        function addProject() {
+            let title = document.getElementById("title").value;
+            let description = document.getElementById("description").value;
+            let team = document.getElementById("team").value;
+
+            if (title === "" || description === "" || team === "") {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            let projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+            projects.push({
+                title: title,
+                description: description,
+                team: team
+            });
+
+            localStorage.setItem("projects", JSON.stringify(projects));
+
+            displayProjects();
+
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("team").value = "";
+        }
+
+        function displayProjects() {
+            let projects = JSON.parse(localStorage.getItem("projects")) || [];
+            let output = "";
+
+            projects.forEach(function(project) {
+                output += `
+                    <div style="background:#202b45;padding:15px;margin:10px;border-radius:10px;">
+                        <h3>${project.title}</h3>
+                        <p>${project.description}</p>
+                        <p>Team: ${project.team}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById("projectList").innerHTML = output;
+        }
+
+        displayProjects();
+    </script>
+
+</body>
+</html>

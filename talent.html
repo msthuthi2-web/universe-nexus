@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Talent World</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="world-page talent-page">
+
+```
+<h1>🌟 Talent World</h1>
+<p>Discover and showcase your talents!</p>
+
+<div class="world-container">
+    <h2>Share Your Talent</h2>
+
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="text" id="talent" placeholder="Your Talent">
+
+    <button onclick="saveTalent()">Submit</button>
+
+    <h2>My Talents</h2>
+    <div id="talentList"></div>
+
+    <button onclick="location.href='index.html'">
+        ⬅ Back to Universe
+    </button>
+</div>
+
+<script>
+    function saveTalent() {
+        let name = document.getElementById("name").value.trim();
+        let talent = document.getElementById("talent").value.trim();
+
+        if (name === "" || talent === "") {
+            alert("Please fill all fields!");
+            return;
+        }
+
+        let talents = JSON.parse(localStorage.getItem("talents")) || [];
+
+        talents.push({
+            name: name,
+            talent: talent
+        });
+
+        localStorage.setItem("talents", JSON.stringify(talents));
+
+        displayTalents();
+
+        document.getElementById("name").value = "";
+        document.getElementById("talent").value = "";
+
+        alert("Talent Saved Successfully!");
+    }
+
+    function displayTalents() {
+        let talents = JSON.parse(localStorage.getItem("talents")) || [];
+        let output = "";
+
+        talents.forEach(function(item) {
+            output += `
+                <div class="event-card">
+                    <h3>${item.name}</h3>
+                    <p>Talent: ${item.talent}</p>
+                </div>
+            `;
+        });
+
+        document.getElementById("talentList").innerHTML = output;
+    }
+
+    displayTalents();
+</script>
+```
+
+</body>
+</html>

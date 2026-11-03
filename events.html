@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Events World</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="world-page events-page">
+
+    <h1>🎉 EVENTS WORLD</h1>
+    <p>Discover events, participate and create memories!</p>
+
+    <div class="container">
+        <h2>Register for an Event</h2>
+
+        <input type="text" id="studentName" placeholder="Student Name">
+
+        <input type="text" id="eventName" placeholder="Event Name">
+
+        <textarea id="eventReason" placeholder="Why do you want to participate?"></textarea>
+
+        <button onclick="registerEvent()">Register Now</button>
+
+        <h2>My Registrations</h2>
+        <div id="eventList"></div>
+
+        <button onclick="location.href='index.html'">
+            ⬅ Back to Universe
+        </button>
+    </div>
+
+    <script>
+        function registerEvent() {
+            let name = document.getElementById("studentName").value;
+            let event = document.getElementById("eventName").value;
+            let reason = document.getElementById("eventReason").value;
+
+            if (name === "" || event === "" || reason === "") {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            let events = JSON.parse(localStorage.getItem("events")) || [];
+
+            events.push({
+                name: name,
+                event: event,
+                reason: reason
+            });
+
+            localStorage.setItem("events", JSON.stringify(events));
+
+            displayEvents();
+
+            document.getElementById("studentName").value = "";
+            document.getElementById("eventName").value = "";
+            document.getElementById("eventReason").value = "";
+
+            alert("Registration Successful!");
+        }
+
+        function displayEvents() {
+            let events = JSON.parse(localStorage.getItem("events")) || [];
+            let output = "";
+
+            events.forEach(function(item) {
+                output += `
+                    <div class="event-card">
+                        <h3>${item.event}</h3>
+                        <p>Student: ${item.name}</p>
+                        <p>Reason: ${item.reason}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById("eventList").innerHTML = output;
+        }
+
+        displayEvents();
+    </script>
+
+</body>
+</html>

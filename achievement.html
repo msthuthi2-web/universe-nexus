@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Achievement World | UniVerse Nexus</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="world-page achievement-page">
+
+    <h1>🏆 ACHIEVEMENT WORLD</h1>
+
+    <p>Celebrate your success and showcase your achievements!</p>
+
+    <div class="container">
+
+        <h2>Add Your Achievement</h2>
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="Student Name"
+        >
+
+        <input
+            type="text"
+            id="achievementTitle"
+            placeholder="Achievement Title"
+        >
+
+        <textarea
+            id="achievementDescription"
+            placeholder="Describe your achievement"
+        ></textarea>
+
+        <button onclick="addAchievement()">
+            Save Achievement
+        </button>
+
+
+        <h2>My Achievements</h2>
+
+        <div id="achievementList"></div>
+
+
+        <!-- NAVIGATION BUTTONS -->
+
+        <button onclick="location.href='index.html'">
+            ⬅ Back to Universe
+        </button>
+
+        <button onclick="location.href='ideas.html'">
+            💡 Suggest Ideas
+        </button>
+
+        <button onclick="location.href='dashboard.html'">
+            📊 Go to Dashboard
+        </button>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function addAchievement() {
+
+            let name = document.getElementById("studentName").value.trim();
+
+            let title = document.getElementById("achievementTitle").value.trim();
+
+            let description = document.getElementById("achievementDescription").value.trim();
+
+
+            if (name === "" || title === "" || description === "") {
+
+                alert("Please fill all fields!");
+
+                return;
+            }
+
+
+            let achievements =
+                JSON.parse(localStorage.getItem("achievements")) || [];
+
+
+            achievements.push({
+
+                name: name,
+                title: title,
+                description: description
+
+            });
+
+
+            localStorage.setItem(
+                "achievements",
+                JSON.stringify(achievements)
+            );
+
+
+            displayAchievements();
+
+
+            document.getElementById("studentName").value = "";
+
+            document.getElementById("achievementTitle").value = "";
+
+            document.getElementById("achievementDescription").value = "";
+
+
+            alert("Achievement Saved Successfully!");
+
+        }
+
+
+        function displayAchievements() {
+
+            let achievements =
+                JSON.parse(localStorage.getItem("achievements")) || [];
+
+
+            let output = "";
+
+
+            achievements.forEach(function(item) {
+
+                output += `
+                    <div class="achievement-card">
+
+                        <h3>🏅 ${item.title}</h3>
+
+                        <p>Student: ${item.name}</p>
+
+                        <p>${item.description}</p>
+
+                    </div>
+                `;
+
+            });
+
+
+            document.getElementById("achievementList").innerHTML = output;
+
+        }
+
+
+        displayAchievements();
+
+    </script>
+
+</body>
+</html>

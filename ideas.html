@@ -1,0 +1,254 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Suggest Ideas | UniVerse Nexus</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="world-page ideas-page">
+
+    <!-- WEBSITE NAVIGATION -->
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            ✦ UniVerse Nexus
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="talent.html">Talent</a>
+            <a href="project.html">Projects</a>
+            <a href="events.html">Events</a>
+            <a href="achievement.html">Achievements</a>
+            <a href="ideas.html" class="active">Suggest Ideas</a>
+            <a href="teammates.html">Find Teammates</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="world-container">
+
+        <span class="tag">✧ SHARE YOUR CREATIVITY ✧</span>
+
+        <h1>Suggest Your Ideas 💡</h1>
+
+        <p>Every great project begins with a small idea.</p>
+
+
+        <!-- IDEA SUBMISSION FORM -->
+        <form id="ideaForm">
+
+            <label for="studentName">Your Name</label>
+
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Enter your name"
+                required
+            >
+
+
+            <label for="ideaTitle">Idea Title</label>
+
+            <input
+                type="text"
+                id="ideaTitle"
+                placeholder="Enter your idea title"
+                required
+            >
+
+
+            <label for="ideaCategory">Category</label>
+
+            <select id="ideaCategory" required>
+
+                <option value="">Select Category</option>
+                <option value="Technology">Technology</option>
+                <option value="Education">Education</option>
+                <option value="Business">Business</option>
+                <option value="Creative">Creative</option>
+                <option value="Social Impact">Social Impact</option>
+                <option value="Other">Other</option>
+
+            </select>
+
+
+            <label for="ideaDescription">Describe Your Idea</label>
+
+            <textarea
+                id="ideaDescription"
+                placeholder="Explain your idea..."
+                rows="5"
+                required
+            ></textarea>
+
+
+            <button type="submit">
+                ✦ Submit Idea
+            </button>
+
+        </form>
+
+
+        <!-- SHARED IDEAS -->
+        <h2>🌟 Shared Ideas</h2>
+
+        <div id="ideaList"></div>
+
+
+        <!-- NAVIGATION BUTTONS -->
+        <div class="page-buttons">
+
+            <a href="index.html" class="back-btn">
+                ← Back to Universe
+            </a>
+
+            <a href="teammates.html" class="back-btn">
+                🤝 Find Teammates
+            </a>
+
+            <a href="dashboard.html" class="back-btn">
+                📊 Go to Dashboard →
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        const ideaForm = document.getElementById("ideaForm");
+        const ideaList = document.getElementById("ideaList");
+
+
+        // DISPLAY SAVED IDEAS
+        function displayIdeas() {
+
+            const ideas = JSON.parse(
+                localStorage.getItem("suggestedIdeas") || "[]"
+            );
+
+            ideaList.innerHTML = "";
+
+            if (ideas.length === 0) {
+
+                ideaList.innerHTML =
+                    "<p>No ideas shared yet. Be the first to share!</p>";
+
+                return;
+            }
+
+
+            ideas.forEach(function(idea) {
+
+                const card = document.createElement("div");
+
+                card.className = "idea-card";
+
+
+                const title = document.createElement("h3");
+
+                title.textContent = idea.title;
+
+
+                const details = document.createElement("p");
+
+                details.textContent = idea.description;
+
+
+                const info = document.createElement("small");
+
+                info.textContent =
+                    "By " + idea.name + " | " + idea.category;
+
+
+                card.appendChild(title);
+                card.appendChild(details);
+                card.appendChild(info);
+
+                ideaList.appendChild(card);
+
+            });
+
+        }
+
+
+        // SUBMIT NEW IDEA
+        ideaForm.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const newIdea = {
+
+                name: document.getElementById("studentName").value.trim(),
+
+                title: document.getElementById("ideaTitle").value.trim(),
+
+                category: document.getElementById("ideaCategory").value,
+
+                description: document.getElementById("ideaDescription").value.trim()
+
+            };
+
+
+            // VALIDATION
+            if (
+                !newIdea.name ||
+                !newIdea.title ||
+                !newIdea.category ||
+                !newIdea.description
+            ) {
+
+                alert("Please fill all fields.");
+
+                return;
+            }
+
+
+            // GET EXISTING IDEAS
+            const ideas = JSON.parse(
+                localStorage.getItem("suggestedIdeas") || "[]"
+            );
+
+
+            // SAVE NEW IDEA
+            ideas.push(newIdea);
+
+            localStorage.setItem(
+                "suggestedIdeas",
+                JSON.stringify(ideas)
+            );
+
+
+            alert("Your idea has been submitted successfully!");
+
+
+            // RESET FORM
+            ideaForm.reset();
+
+
+            // UPDATE SHARED IDEAS
+            displayIdeas();
+
+        });
+
+
+        // LOAD IDEAS WHEN PAGE OPENS
+        displayIdeas();
+
+    </script>
+
+</body>
+</html>
+

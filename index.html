@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniVerse Nexus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script type="module" src="script.js"></script>
+  <div id="universe"></div>
+  <main class="intro" id="intro">
+    <p class="subtitle">A WORLD BEYOND IMAGINATION</p>
+    <h1>UniVerse <span>Nexus</span></h1>
+    <p class="description">Explore. Discover. Create. Connect.</p>
+    <button id="enterBtn">ENTER THE UNIVERSE</button>
+  </main>
+
+  <div id="loading">INITIALIZING THE UNIVERSE...</div>
+
+  <main id="universeHub" aria-hidden="true">
+    <header class="hub-header">
+      <p class="eyebrow">YOUR NEXT ADVENTURE STARTS HERE</p>
+      <h2>Choose Your <span>World</span></h2>
+      <p>Explore opportunities beyond the classroom.</p>
+    </header>
+
+    <section class="world-container">
+      <button class="world-card" data-world="Talent World">
+        <span class="world-icon">✦</span>
+        <h3>Talent World</h3>
+        <p>Showcase skills, creativity and interests.</p>
+        <small>EXPLORE WORLD ↗</small>
+      </button>
+      <button class="world-card" data-world="Project World">
+        <span class="world-icon">⌘</span>
+        <h3>Project World</h3>
+        <p>Discover ideas and student projects.</p>
+        <small>EXPLORE WORLD ↗</small>
+      </button>
+      <button class="world-card" data-world="Events World">
+        <span class="world-icon">✧</span>
+        <h3>Events World</h3>
+        <p>Find workshops, competitions and campus events.</p>
+        <small>EXPLORE WORLD ↗</small>
+      </button>
+      <button class="world-card" data-world="Achievement World">
+        <span class="world-icon">★</span>
+        <h3>Achievement World</h3>
+        <p>Celebrate student milestones and success.</p>
+        <small>EXPLORE WORLD ↗</small>
+      </button>
+    </section>
+
+    <section class="world-detail" id="worldDetail" hidden>
+      <button id="backBtn" class="back-button">← BACK TO WORLDS</button>
+      <p class="eyebrow">UNIVERSE NEXUS / STUDENT SPACE</p>
+      <h2 id="detailTitle">World</h2>
+      <p id="detailText"></p>
+      <div class="detail-note">
+        This section is ready for student content. Add your entries and explore the world!
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
